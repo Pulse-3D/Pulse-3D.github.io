@@ -1,197 +1,112 @@
-const products = [
+const pokemonLinks = [
   {
-    id: "orbital-stand",
-    name: "Orbital Phone Stand",
-    category: "Desk accessory",
-    price: "£8.00",
-    format: "STL",
-    licence: "Personal use",
-    description: "A clean, futuristic stand designed for fast printing and a premium desk setup.",
-    file: "assets/stl/orbital-phone-stand.stl",
-    paymentUrl: "https://example.com/checkout/orbital-phone-stand",
+    title: "Official Pokemon",
+    category: "News",
+    description: "Official games, news, videos, and character pages.",
+    url: "https://www.pokemon.com/uk",
   },
   {
-    id: "grid-lamp",
-    name: "Grid Lamp Shade",
-    category: "Home decor",
-    price: "£12.00",
-    format: "STL",
-    licence: "Personal use",
-    description: "A geometric lamp shade STL that turns a standard light into a statement piece.",
-    file: "assets/stl/grid-lamp-shade.stl",
-    paymentUrl: "https://example.com/checkout/grid-lamp-shade",
+    title: "Pokedex",
+    category: "Stats",
+    description: "Fast Pokemon stats, evolutions, moves, and type data.",
+    url: "https://pokemondb.net/pokedex/all",
   },
   {
-    id: "modular-hook",
-    name: "Modular Wall Hook",
-    category: "Utility print",
-    price: "£5.00",
-    format: "STL",
-    licence: "Personal use",
-    description: "A compact wall hook system for entryways, studios, and workshop storage.",
-    file: "assets/stl/modular-wall-hook.stl",
-    paymentUrl: "https://example.com/checkout/modular-wall-hook",
+    title: "Bulbapedia",
+    category: "Wiki",
+    description: "Detailed community encyclopedia for games, anime, cards, and lore.",
+    url: "https://bulbapedia.bulbagarden.net/wiki/Main_Page",
+  },
+  {
+    title: "Serebii",
+    category: "Updates",
+    description: "Game guides, event details, news, and deep reference pages.",
+    url: "https://www.serebii.net/",
+  },
+  {
+    title: "Pokemon Showdown",
+    category: "Battles",
+    description: "Team building and online battle simulator for competitive play.",
+    url: "https://play.pokemonshowdown.com/",
+  },
+  {
+    title: "Pokemon TCG",
+    category: "Cards",
+    description: "Official trading card game resources, products, and updates.",
+    url: "https://tcg.pokemon.com/en-gb/",
   },
 ];
 
-const storageKey = "pulse3d-purchases";
-const grid = document.getElementById("product-grid");
-const productCount = document.getElementById("product-count");
-const dialog = document.getElementById("purchase-dialog");
-const dialogTitle = document.getElementById("dialog-title");
-const dialogCopy = document.getElementById("dialog-copy");
-const paymentLink = document.getElementById("payment-link");
-const confirmPayment = document.getElementById("confirm-payment");
-const closeDialog = document.getElementById("close-dialog");
+const linkGrid = document.getElementById("link-grid");
+const linkCount = document.getElementById("link-count");
+const searchForm = document.getElementById("search-form");
+const searchTerm = document.getElementById("search-term");
 
-let activeProduct = null;
-
-function readPurchases() {
-  try {
-    return JSON.parse(localStorage.getItem(storageKey)) ?? {};
-  } catch {
-    return {};
-  }
-}
-
-function writePurchases(purchases) {
-  localStorage.setItem(storageKey, JSON.stringify(purchases));
-}
-
-function isOwned(productId) {
-  return Boolean(readPurchases()[productId]);
-}
-
-function unlockProduct(productId) {
-  const purchases = readPurchases();
-  purchases[productId] = true;
-  writePurchases(purchases);
-}
-
-function createPreviewLabel(product) {
-  const label = document.createElement("span");
-  label.className = "preview-ribbon";
-  label.textContent = `${product.category} · STL`;
-  return label;
-}
-
-function createCard(product) {
+function createLinkCard(link) {
   const card = document.createElement("article");
-  card.className = "product-card";
+  card.className = "link-card";
 
-  const preview = document.createElement("div");
-  preview.className = "product-preview";
-  preview.appendChild(createPreviewLabel(product));
-
-  const meta = document.createElement("div");
-  meta.className = "product-meta";
+  const topLine = document.createElement("div");
+  topLine.className = "link-card-top";
 
   const category = document.createElement("span");
-  category.className = "pill";
-  category.textContent = product.category;
+  category.className = "category-pill";
+  category.textContent = link.category;
 
-  const price = document.createElement("span");
-  price.className = "price-pill";
-  price.textContent = product.price;
+  const arrow = document.createElement("span");
+  arrow.className = "arrow-icon";
+  arrow.setAttribute("aria-hidden", "true");
+  arrow.textContent = "->";
 
-  meta.append(category, price);
+  topLine.append(category, arrow);
 
   const title = document.createElement("h3");
-  title.textContent = product.name;
+  title.textContent = link.title;
 
   const description = document.createElement("p");
-  description.textContent = product.description;
+  description.textContent = link.description;
 
-  const detail = document.createElement("div");
-  detail.className = "product-detail";
+  const button = document.createElement("a");
+  button.className = "card-button";
+  button.href = link.url;
+  button.target = "_blank";
+  button.rel = "noreferrer";
+  button.textContent = "Visit site";
 
-  const format = document.createElement("span");
-  format.textContent = product.format;
-
-  const licence = document.createElement("span");
-  licence.textContent = product.licence;
-
-  detail.append(format, licence);
-
-  const actions = document.createElement("div");
-  actions.className = "product-actions";
-
-  const buyButton = document.createElement("button");
-  buyButton.type = "button";
-  buyButton.className = "secondary-btn";
-  buyButton.textContent = isOwned(product.id) ? "Purchased" : "Buy now";
-
-  const downloadButton = document.createElement("button");
-  downloadButton.type = "button";
-  downloadButton.className = "primary-btn";
-  downloadButton.textContent = isOwned(product.id) ? "Download STL" : "Unlock download";
-
-  buyButton.addEventListener("click", () => openPurchaseDialog(product));
-  downloadButton.addEventListener("click", () => {
-    if (isOwned(product.id)) {
-      startDownload(product.file, product.name);
-      return;
-    }
-
-    openPurchaseDialog(product);
-  });
-
-  actions.append(buyButton, downloadButton);
-  card.append(preview, meta, title, description, detail, actions);
-
+  card.append(topLine, title, description, button);
   return card;
 }
 
-function renderProducts() {
-  grid.innerHTML = "";
-  products.forEach((product) => {
-    grid.appendChild(createCard(product));
+function renderLinks() {
+  linkGrid.innerHTML = "";
+  pokemonLinks.forEach((link) => {
+    linkGrid.appendChild(createLinkCard(link));
   });
-
-  productCount.textContent = String(products.length);
+  linkCount.textContent = String(pokemonLinks.length);
 }
 
-function openPurchaseDialog(product) {
-  activeProduct = product;
-  dialogTitle.textContent = product.name;
-  dialogCopy.textContent = `${product.price} for a ${product.format} download with a ${product.licence.toLowerCase()} licence. Continue to checkout, then unlock your download.`;
-  paymentLink.href = product.paymentUrl || "#";
-  paymentLink.textContent = product.paymentUrl ? "Open payment link" : "Set a payment link first";
-  confirmPayment.disabled = !product.paymentUrl;
+function buildSearchUrl(site, query) {
+  const encodedQuery = encodeURIComponent(query.trim());
 
-  if (!dialog.open) {
-    dialog.showModal();
+  if (site === "bulbapedia") {
+    return `https://bulbapedia.bulbagarden.net/w/index.php?search=${encodedQuery}`;
   }
+
+  return `https://pokemondb.net/search?q=${encodedQuery}`;
 }
 
-function startDownload(file, name) {
-  const link = document.createElement("a");
-  link.href = file;
-  link.download = `${name}.stl`;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-}
-
-dialog.addEventListener("close", () => {
-  activeProduct = null;
-});
-
-closeDialog.addEventListener("click", () => {
-  dialog.close();
-});
-
-document.getElementById("purchase-form").addEventListener("submit", (event) => {
+searchForm.addEventListener("submit", (event) => {
   event.preventDefault();
 
-  if (!activeProduct) {
-    dialog.close();
+  const submitter = event.submitter;
+  const query = searchTerm.value.trim();
+
+  if (!query) {
+    searchTerm.focus();
     return;
   }
 
-  unlockProduct(activeProduct.id);
-  dialog.close();
-  renderProducts();
+  window.open(buildSearchUrl(submitter.dataset.site, query), "_blank", "noreferrer");
 });
 
-renderProducts();
+renderLinks();
