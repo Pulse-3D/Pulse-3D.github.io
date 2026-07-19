@@ -4,6 +4,8 @@ const products = [
     name: "Orbital Phone Stand",
     category: "Desk accessory",
     price: "£8.00",
+    format: "STL",
+    licence: "Personal use",
     description: "A clean, futuristic stand designed for fast printing and a premium desk setup.",
     file: "assets/stl/orbital-phone-stand.stl",
     paymentUrl: "https://example.com/checkout/orbital-phone-stand",
@@ -13,6 +15,8 @@ const products = [
     name: "Grid Lamp Shade",
     category: "Home decor",
     price: "£12.00",
+    format: "STL",
+    licence: "Personal use",
     description: "A geometric lamp shade STL that turns a standard light into a statement piece.",
     file: "assets/stl/grid-lamp-shade.stl",
     paymentUrl: "https://example.com/checkout/grid-lamp-shade",
@@ -22,6 +26,8 @@ const products = [
     name: "Modular Wall Hook",
     category: "Utility print",
     price: "£5.00",
+    format: "STL",
+    licence: "Personal use",
     description: "A compact wall hook system for entryways, studios, and workshop storage.",
     file: "assets/stl/modular-wall-hook.stl",
     paymentUrl: "https://example.com/checkout/modular-wall-hook",
@@ -36,6 +42,7 @@ const dialogTitle = document.getElementById("dialog-title");
 const dialogCopy = document.getElementById("dialog-copy");
 const paymentLink = document.getElementById("payment-link");
 const confirmPayment = document.getElementById("confirm-payment");
+const closeDialog = document.getElementById("close-dialog");
 
 let activeProduct = null;
 
@@ -95,6 +102,17 @@ function createCard(product) {
   const description = document.createElement("p");
   description.textContent = product.description;
 
+  const detail = document.createElement("div");
+  detail.className = "product-detail";
+
+  const format = document.createElement("span");
+  format.textContent = product.format;
+
+  const licence = document.createElement("span");
+  licence.textContent = product.licence;
+
+  detail.append(format, licence);
+
   const actions = document.createElement("div");
   actions.className = "product-actions";
 
@@ -119,7 +137,7 @@ function createCard(product) {
   });
 
   actions.append(buyButton, downloadButton);
-  card.append(preview, meta, title, description, actions);
+  card.append(preview, meta, title, description, detail, actions);
 
   return card;
 }
@@ -136,7 +154,7 @@ function renderProducts() {
 function openPurchaseDialog(product) {
   activeProduct = product;
   dialogTitle.textContent = product.name;
-  dialogCopy.textContent = `Price: ${product.price}. Connect this button to your payment provider, then unlock the STL download for buyers.`;
+  dialogCopy.textContent = `${product.price} for a ${product.format} download with a ${product.licence.toLowerCase()} licence. Continue to checkout, then unlock your download.`;
   paymentLink.href = product.paymentUrl || "#";
   paymentLink.textContent = product.paymentUrl ? "Open payment link" : "Set a payment link first";
   confirmPayment.disabled = !product.paymentUrl;
@@ -157,6 +175,10 @@ function startDownload(file, name) {
 
 dialog.addEventListener("close", () => {
   activeProduct = null;
+});
+
+closeDialog.addEventListener("click", () => {
+  dialog.close();
 });
 
 document.getElementById("purchase-form").addEventListener("submit", (event) => {
