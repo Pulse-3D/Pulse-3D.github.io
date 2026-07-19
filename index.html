@@ -1,81 +1,154 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Random Info Website</title>
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f4f4f4;
-        }
-
-        header {
-            background: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-
-        section {
-            padding: 20px;
-            max-width: 900px;
-            margin: auto;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            margin: 20px 0;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        footer {
-            text-align: center;
-            padding: 15px;
-            background: #222;
-            color: white;
-            margin-top: 40px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pulse 3D | STL Store</title>
+  <meta
+    name="description"
+    content="Browse and buy downloadable STL files from Pulse 3D."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+  <script defer src="script.js"></script>
 </head>
-
 <body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">P3D</span>
+          <div>
+            <p class="brand-name">Pulse 3D</p>
+            <p class="brand-tag">STL marketplace</p>
+          </div>
+        </div>
+        <a class="ghost-link" href="#catalog">Browse files</a>
+      </nav>
 
-    <header>
-        <h1>Welcome to My Random Info Page</h1>
-        <p>A simple website created in VS Code</p>
+      <section class="hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Digital products for makers</p>
+          <h1>Sell your STL files with clear prices and instant downloads.</h1>
+          <p class="hero-text">
+            Add each STL file as a product, set the price, and link it to a payment
+            provider. After payment, customers can download the file from this site.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-btn" href="#catalog">View products</a>
+            <a class="secondary-btn" href="#how-it-works">How it works</a>
+          </div>
+          <ul class="hero-points">
+            <li>Price per STL</li>
+            <li>Mobile-friendly storefront</li>
+            <li>Easy to edit in script.js</li>
+          </ul>
+        </div>
+
+        <aside class="hero-panel">
+          <div class="panel-card highlight">
+            <p class="panel-label">Store setup</p>
+            <h2>Ready for STL downloads</h2>
+            <p>
+              Replace the sample items with your own STL files, prices, and payment
+              links. The layout is built to showcase 3D models professionally.
+            </p>
+          </div>
+          <div class="panel-stats">
+            <div>
+              <strong id="product-count">0</strong>
+              <span>Products</span>
+            </div>
+            <div>
+              <strong>£</strong>
+              <span>Local pricing</span>
+            </div>
+            <div>
+              <strong>ZIP</strong>
+              <span>Delivery ready</span>
+            </div>
+          </div>
+        </aside>
+      </section>
     </header>
 
-    <section>
-        <div class="card">
-            <h2>Random Fact #1</h2>
-            <p>The average cloud weighs about 500,000 kilograms. Yes, the fluffy things in the sky are *heavy*.</p>
+    <main>
+      <section id="catalog" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">Catalog</p>
+          <h2>Featured STL files</h2>
+          <p>
+            Each card can point to your STL file, a preview image, and a payment link.
+            Edit the product list in script.js to add more items.
+          </p>
         </div>
 
-        <div class="card">
-            <h2>Random Fact #2</h2>
-            <p>Honey never spoils. Archaeologists found 3,000-year-old honey in ancient Egyptian tombs that was still perfectly edible.</p>
-        </div>
+        <div id="product-grid" class="product-grid" aria-live="polite"></div>
+      </section>
 
-        <div class="card">
-            <h2>Random Fact #3</h2>
-            <p>Bananas are berries, but strawberries are not. Nature doesn’t care about your definitions.</p>
+      <section id="how-it-works" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">How it works</p>
+          <h2>Simple storefront flow</h2>
         </div>
-
-        <div class="card">
-            <h2>Random Section</h2>
-            <p>This is just a placeholder paragraph. You can replace it with anything — product info, a portfolio, a blog, or whatever you want.</p>
+        <div class="steps-grid">
+          <article class="step-card">
+            <span>01</span>
+            <h3>Add your STL file</h3>
+            <p>
+              Place the STL in your assets folder and update the file path in the
+              product list.
+            </p>
+          </article>
+          <article class="step-card">
+            <span>02</span>
+            <h3>Set the price</h3>
+            <p>
+              Change the price value on each product card so customers see exactly
+              what they’ll pay.
+            </p>
+          </article>
+          <article class="step-card">
+            <span>03</span>
+            <h3>Connect payment</h3>
+            <p>
+              Link the buy button to Stripe, PayPal, Gumroad, or another checkout
+              provider for real payment collection.
+            </p>
+          </article>
         </div>
-    </section>
+      </section>
+    </main>
 
-    <footer>
-        <p>© 2026 My Random Website</p>
+    <footer class="footer">
+      <p>© 2026 Pulse 3D. STL downloads made simple.</p>
     </footer>
+  </div>
 
+  <dialog id="purchase-dialog" class="purchase-dialog">
+    <form method="dialog" class="dialog-card" id="purchase-form">
+      <button class="close-btn" value="cancel" aria-label="Close dialog">×</button>
+      <p class="panel-label">Purchase file</p>
+      <h3 id="dialog-title">Unlock download</h3>
+      <p id="dialog-copy" class="dialog-copy"></p>
+      <div class="dialog-actions">
+        <a id="payment-link" class="primary-btn" href="#" target="_blank" rel="noreferrer">
+          Open payment link
+        </a>
+        <button id="confirm-payment" class="secondary-btn" value="confirm" type="submit">
+          I have paid
+        </button>
+      </div>
+      <p class="dialog-note">
+        This page is set up for storefront display. For secure automatic payment
+        verification, connect the buy button to a real checkout system.
+      </p>
+    </form>
+  </dialog>
 </body>
 </html>
